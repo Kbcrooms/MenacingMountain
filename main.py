@@ -14,6 +14,8 @@ running = True
 speed = 0
 entities = []
 player = Player(screen, (255,0,0))
+level = pygame.image.load("ballonn.png")
+levelMask = pygame.mask.from_surface(level)
 entities.append(player)
 
 def draw():
