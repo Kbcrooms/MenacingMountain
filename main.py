@@ -5,6 +5,7 @@ from platform import Platform
 screenWidth = 640
 screenHeight = 480
 framerate = 60
+prevSpeedTime = [time.clock()]
 background = pygame.image.load('background.png')
 pygame.init()
 clock = pygame.time.Clock()
@@ -12,7 +13,7 @@ screen = pygame.display.set_mode((screenWidth,screenHeight))
 screen.fill((255,255,255))
 screen.blit(background, (0, 0))
 running = True
-speed = 0
+speed = [0]
 entities = []
 platforms = []
 #platform = pygame.draw.rect(screen,(25,255,255),(0,370,640,130),0)
@@ -34,9 +35,14 @@ def update():
         entity.update()
 
 def move():
-    if(speed>0):
+    if(speed[0]>9):
+        speed[0] = 9
+    if(speed[0]>0):
+        if(time.clock()-prevSpeedTime[0]>.3):
+            speed[0]-=1
         for i in range(1,len(entities)):
-            entities[i].move(1)
+            entities[i].move(speed[0])
+
 while running:
     delta = clock.tick(framerate)
     for event in pygame.event.get():
@@ -45,7 +51,8 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 print ("right")
-                speed = 1
+                speed[0] += 3
+                prevSpeedTime[0] = time.clock()
             elif event.key == pygame.K_DOWN:
                 print ("down")
             elif event.key == pygame.K_SPACE:
