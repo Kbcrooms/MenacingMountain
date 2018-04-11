@@ -1,6 +1,7 @@
 import pygame, time
 #from player import *
 from player import Player
+from platform import Platform
 screenWidth = 640
 screenHeight = 480
 framerate = 60
@@ -13,21 +14,29 @@ screen.blit(background, (0, 0))
 running = True
 speed = 0
 entities = []
-player = Player(screen, (255,0,0))
-level = pygame.image.load("ballonn.png")
-levelMask = pygame.mask.from_surface(level)
+platforms = []
+#platform = pygame.draw.rect(screen,(25,255,255),(0,370,640,130),0)
+platform = Platform(screen,0,370,640,130)
+platforms.append(platform)
+player = Player(screen, (255,0,0),120,350,platforms)
+#player is always at entity 0 index
 entities.append(player)
+entities.append(platform)
 
 def draw():
     for entity in entities:
         entity.draw()
 
 def update():
+    #need check to determine if platform still exists
+    #prob need to change to for number loop
     for entity in entities:
         entity.update()
+
 def move():
-    for i in range(1,len(entities)):
-        entities[i].move()
+    if(speed>0):
+        for i in range(1,len(entities)):
+            entities[i].move(1)
 while running:
     delta = clock.tick(framerate)
     for event in pygame.event.get():
@@ -36,14 +45,16 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 print ("right")
-                move()
+                speed = 1
+            elif event.key == pygame.K_DOWN:
+                print ("down")
             elif event.key == pygame.K_SPACE:
                 print ("jump")
                 player.jump()
         elif event.type == pygame.KEYUP:
             print ("Key Up")
     screen.blit(background, (0, 0))
-    pygame.draw.rect(screen,(25,255,255),(0,370,640,130),0)
     update()
     draw()
+    move()
     pygame.display.flip()
