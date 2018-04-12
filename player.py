@@ -1,26 +1,30 @@
 import pygame
 class Player(object):
 
-    def __init__(self,screen,color,posx,posy,platforms):
+    def __init__(self,screen,color,posx,posy,platforms,hazards):
         self.color = color
         self.screen = screen
-        self.posx = 120
-        self.posy = 351
+        self.posx = 100
+        self.posy = 150
         self.platforms = platforms
+        self.hazards = hazards
         self.last_posx = 0
         self.last_posy = 0
-        self.width = 20
-        self.height = 20
+        self.width = 35
+        self.height = 55
         self.avi = pygame.draw.rect(self.screen,self.color,(self.posx,self.posy,self.width,self.height),0)
         self.jumpCounter = -1
 
     def draw(self):
-        self.avi = pygame.draw.rect(self.screen,self.color,(self.posx,self.posy,20,20),0)
+        self.avi = pygame.draw.rect(self.screen,self.color,(self.posx,self.posy,self.width,self.height),0)
 
     def update(self):
+        if (self.killed()):
+                print("dead")
+
         if self.jumpCounter >-1:
             self.jumpCounter+=1
-            if self.jumpCounter<10:
+            if self.jumpCounter<13:
                 self.posy-=10
 
             else:
@@ -40,3 +44,9 @@ class Player(object):
         for platform in self.platforms:
             if (platform.posx<=self.posx and platform.posx+platform.width>=self.posx):
                 return platform.avi.colliderect(self.avi)
+
+    def killed(self):
+        for hazard in self.hazards:
+            if(hazard.avi.colliderect(self.avi)):
+                return True
+        return False
