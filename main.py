@@ -49,7 +49,6 @@ def generatelevel():
     value = (value % score[0]) % 30
     lastplat = platforms[-1:]
     if value<10:
-        print (lastplat[0].posx + lastplat[0].width + 80)
         newPlatform = Platform(screen,lastplat[0].posx + lastplat[0].width + 80,420,800,60,platforms,entities)
         platforms.append(newPlatform)
         entities.append(newPlatform)
@@ -131,9 +130,6 @@ while running:
     update()
     if len(platforms)<2:
         generatelevel()
-        print("generated platform")
-    print(len(platforms))
-
     draw()
     if player.alive:
         move()
