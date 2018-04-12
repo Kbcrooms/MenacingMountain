@@ -14,17 +14,20 @@ class Player(object):
         self.height = 55
         self.avi = pygame.draw.rect(self.screen,self.color,(self.posx,self.posy,self.width,self.height),0)
         self.jumpCounter = -1
+        self.alive = True
 
     def draw(self):
         self.avi = pygame.draw.rect(self.screen,self.color,(self.posx,self.posy,self.width,self.height),0)
 
     def update(self):
-        if (self.killed()):
-                True
+        self.deathcheck()
+        if (not self.alive):
+            self.color = (255,0,0)
+
 
         if self.jumpCounter >-1:
             self.jumpCounter+=1
-            if self.jumpCounter<13:
+            if self.jumpCounter<16:
                 self.posy-=10
 
             else:
@@ -45,10 +48,9 @@ class Player(object):
             if (platform.posx<=self.posx and platform.posx+platform.width>=self.posx or platform.posx+platform.width>=self.posx+self.width and platform.posx<=self.posx+self.width ):
                 return platform.avi.colliderect(self.avi)
 
-    def killed(self):
+    def deathcheck(self):
         if not self.screen.get_rect().contains(self.avi):
-            return True
+            self.alive = False
         for hazard in self.hazards:
             if(hazard.avi.colliderect(self.avi)):
-                return True
-        return False
+                self.alive = False

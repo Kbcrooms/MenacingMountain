@@ -7,8 +7,9 @@ from speedbar import Speedbar
 screenWidth = 640
 screenHeight = 480
 framerate = 60
+fullscreen = False
 key=[0]
-key[0] = "MenMon"
+key[0] = "abcde"
 prevSpeedTime = [time.clock()]
 background = pygame.image.load('background_small.png')
 pygame.init()
@@ -32,20 +33,43 @@ platform2 = Platform(screen,720,460,640,20,platforms,entities)
 platforms.append(platform)
 platforms.append(platform2)
 snowpea = Snowpea(screen, 380, 400, platforms)
-widgets = []
 hazards.append(snowpea)
-player = Player(screen, (255,0,0),120,350,platforms,hazards)
+widgets = []
+player = Player(screen, (0,255,0),120,350,platforms,hazards)
 #player is always at entity 0 index
 entities.append(player)
-entities.append(snowpea)
 entities.append(platform)
 entities.append(platform2)
+entities.append(snowpea)
 widgets.append(speedbar)
 
 
 def generatelevel():
-    value = hash(key[0])
-    print(value)
+    value = abs(hash(key[0]))
+    value = (value % score[0]) % 30
+    lastplat = platforms[-1:]
+    if value<10:
+        print (lastplat[0].posx + lastplat[0].width + 80)
+        newPlatform = Platform(screen,lastplat[0].posx + lastplat[0].width + 80,420,800,60,platforms,entities)
+        platforms.append(newPlatform)
+        entities.append(newPlatform)
+        newSnowpea = Snowpea(screen, newPlatform.posx + newPlatform.width/2 , newPlatform.posy - 50, platforms)
+        hazards.append(newSnowpea)
+        entities.append(newSnowpea)
+    elif value<20:
+        newPlatform = Platform(screen,lastplat[0].posx + lastplat[0].width + 80,440,560,40,platforms,entities)
+        platforms.append(newPlatform)
+        entities.append(newPlatform)
+        newSnowpea = Snowpea(screen, newPlatform.posx + newPlatform.width/2 , newPlatform.posy - 50, platforms)
+        hazards.append(newSnowpea)
+        entities.append(newSnowpea)
+    elif value<30:
+        newPlatform = Platform(screen,lastplat[0].posx + lastplat[0].width + 80,460,1200,20,platforms,entities)
+        platforms.append(newPlatform)
+        entities.append(newPlatform)
+        newSnowpea = Snowpea(screen, newPlatform.posx + newPlatform.width/2 , newPlatform.posy - 50, platforms)
+        hazards.append(newSnowpea)
+        entities.append(newSnowpea)
 
 def draw():
     for entity in entities:
@@ -90,6 +114,11 @@ while running:
             elif event.key == pygame.K_SPACE:
                 print ("jump")
                 player.jump()
+            elif event.key == pygame.K_f:
+                if fullscreen:
+                    screen = pygame.display.set_mode((screenWidth,screenHeight))
+                else:
+                    screen = pygame.display.set_mode((screenWidth,screenHeight),pygame.FULLSCREEN)
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
@@ -100,9 +129,14 @@ while running:
     screen.blit(scorecard[0],(10,0))
 
     update()
-    draw()
-    move()
-    for platform in platforms:
-        print(screen.get_rect().contains(platform.avi))
+    if len(platforms)<2:
+        generatelevel()
+        print("generated platform")
     print(len(platforms))
+
+    draw()
+    if player.alive:
+        move()
+
+
     pygame.display.flip()

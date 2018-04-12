@@ -7,7 +7,7 @@ class Platform(object):
         self.posy = posy
         self.width = width
         self.height = height
-        self.avi = pygame.draw.rect(self.screen,(25,255,255),(self.posx,self.posy,self.width,self.height),0)
+        self.avi = pygame.draw.rect(self.screen,(165, 242, 243),(self.posx,self.posy,self.width,self.height),0)
         self.platforms = platforms
         self.entities = entities
         self.wasOnscreen = 0
