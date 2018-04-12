@@ -1,9 +1,13 @@
-import pygame, time
+import pygame, time, os
 #from player import *
 from player import Player
 from platform import Platform
 from snowpea import Snowpea
 from speedbar import Speedbar
+
+#displayInfo = pygame.display.Info()
+#os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % ((infoObject.current_w-640)/2, (infoObject.current_h-480)/2)
+
 screenWidth = 640
 screenHeight = 480
 framerate = 60
