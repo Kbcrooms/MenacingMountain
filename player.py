@@ -20,7 +20,7 @@ class Player(object):
 
     def update(self):
         if (self.killed()):
-                print("dead")
+                True
 
         if self.jumpCounter >-1:
             self.jumpCounter+=1
@@ -42,10 +42,12 @@ class Player(object):
 
     def onPlatform(self):
         for platform in self.platforms:
-            if (platform.posx<=self.posx and platform.posx+platform.width>=self.posx):
+            if (platform.posx<=self.posx and platform.posx+platform.width>=self.posx or platform.posx+platform.width>=self.posx+self.width and platform.posx<=self.posx+self.width ):
                 return platform.avi.colliderect(self.avi)
 
     def killed(self):
+        if not self.screen.get_rect().contains(self.avi):
+            return True
         for hazard in self.hazards:
             if(hazard.avi.colliderect(self.avi)):
                 return True

@@ -7,9 +7,15 @@ from speedbar import Speedbar
 screenWidth = 640
 screenHeight = 480
 framerate = 60
+key=[0]
+key[0] = "MenMon"
 prevSpeedTime = [time.clock()]
-background = pygame.image.load('background.png')
+background = pygame.image.load('background_small.png')
 pygame.init()
+font = pygame.font.SysFont("Helvetica", 25)
+score = [0]
+scorecard = [0]
+scorecard[0] = font.render(str(score[0]), True, (0, 0, 0))
 clock = pygame.time.Clock()
 #screen = pygame.display.set_mode((screenWidth,screenHeight),pygame.FULLSCREEN)
 screen = pygame.display.set_mode((screenWidth,screenHeight))
@@ -20,13 +26,13 @@ speed = [0]
 entities = []
 platforms = []
 hazards = []
-widgets = []
 speedbar = Speedbar(screen,speed)
-platform = Platform(screen,0,370,640,130)
-platform2 = Platform(screen,720,370,640,130)
+platform = Platform(screen,0,460,640,20,platforms,entities)
+platform2 = Platform(screen,720,460,640,20,platforms,entities)
 platforms.append(platform)
 platforms.append(platform2)
-snowpea = Snowpea(screen, 380, 325, platforms)
+snowpea = Snowpea(screen, 380, 400, platforms)
+widgets = []
 hazards.append(snowpea)
 player = Player(screen, (255,0,0),120,350,platforms,hazards)
 #player is always at entity 0 index
@@ -36,6 +42,10 @@ entities.append(platform)
 entities.append(platform2)
 widgets.append(speedbar)
 
+
+def generatelevel():
+    value = hash(key[0])
+    print(value)
 
 def draw():
     for entity in entities:
@@ -51,15 +61,18 @@ def update():
 
     for widget in widgets:
         widget.update()
+
 def move():
     if(speed[0]>9):
         speed[0] = 9
     if(speed[0]>0):
-        if(time.clock()-prevSpeedTime[0]>.1):
+        if(time.clock()-prevSpeedTime[0]>.3):
             speed[0]-=1
             prevSpeedTime[0] = time.clock()
         for i in range(1,len(entities)):
             entities[i].move(speed[0])
+        score[0]+= speed[0]
+        scorecard[0] = font.render(str(score[0]), True, (255, 255, 255))
 
 while running:
     delta = clock.tick(framerate)
@@ -79,10 +92,17 @@ while running:
                 player.jump()
             elif event.key == pygame.K_ESCAPE:
                 running = False
+
         elif event.type == pygame.KEYUP:
             print ("Key Up")
+
     screen.blit(background, (0, 0))
+    screen.blit(scorecard[0],(10,0))
+
     update()
     draw()
     move()
+    for platform in platforms:
+        print(screen.get_rect().contains(platform.avi))
+    print(len(platforms))
     pygame.display.flip()
