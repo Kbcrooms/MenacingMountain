@@ -71,4 +71,8 @@ while running:
     elif not playing:
         screen.fill((0,0,0))
         screen.blit(startmenu,startmenu.get_rect(center=(320,240)))
+    if player.lives<=0:
+        playing = False
+        player.lives = 1
+        animateCount = 0
     pygame.display.flip()

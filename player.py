@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.x,self.y)
         self.prevTime = time.clock()
         self.animateCount = 0
-        self.lives = 3
+        self.lives = 1
 
     def update(self):
         if(time.clock()-self.prevTime >.1):
