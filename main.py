@@ -17,8 +17,8 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load('sounds/soundtrack.wav')
 #pygame.mixer.music.play(-1)
-
 font = pygame.font.SysFont("Helvetica", 25)
+startmenu = font.render('Press Enter to Start', True, (255, 255, 255))
 screen = pygame.display.set_mode((screenWidth,screenHeight))
 pygame.display.set_caption("Menacing Mountain")
 screen.fill((255,255,255))
@@ -38,6 +38,7 @@ sprites.add(snowman)
 sprites.add(snowspray)
 sprites.add(carrot)
 running = True
+playing = False
 while running:
     delta = clock.tick(framerate)
     for event in pygame.event.get():
@@ -46,24 +47,28 @@ while running:
                 print("")
             elif event.key == pygame.K_ESCAPE:
                 running = False
+            elif event.key == pygame.K_RETURN:
+                playing = True
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 print("")
         elif event.type == pygame.QUIT:
             running = False
+    if playing:
+        #Update Start
+        sprites.update()
+        #Update End
 
-    #Update Start
-    sprites.update()
-    #Update End
-
-    #Draw Start
-    screen.blit(background, (0, 0))
-    mountainSprite = pygame.draw.polygon(screen,(255,255,255),((0,350),(0,slopeY),(800,480)))
-    sprites.draw(screen)
-    screen.blit(snowSprites[animateCount%4],(0,0))
-    if(time.clock()-prevTime>.035):
-        animateCount += 1
-        prevTime = time.clock()
-    #Draw End
-
+        #Draw Start
+        screen.blit(background, (0, 0))
+        mountainSprite = pygame.draw.polygon(screen,(255,255,255),((0,350),(0,slopeY),(800,480)))
+        sprites.draw(screen)
+        screen.blit(snowSprites[animateCount%4],(0,0))
+        if(time.clock()-prevTime>.035):
+            animateCount += 1
+            prevTime = time.clock()
+        #Draw End
+    elif not playing:
+        screen.fill((0,0,0))
+        screen.blit(startmenu,startmenu.get_rect(center=(320,240)))
     pygame.display.flip()
