@@ -4,6 +4,7 @@ class Snowspray(pygame.sprite.Sprite):
 
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
+        self.visible = 1
         self.width = 110
         self.height = 110
         self.images = []
@@ -23,4 +24,4 @@ class Snowspray(pygame.sprite.Sprite):
         if(time.clock()-self.prevTime >.1):
             self.prevTime = time.clock()
             self.animateCount += 1
-            self.image = pygame.transform.scale(self.images[self.animateCount%4],(self.width,self.height))
+            self.image = pygame.transform.scale(self.images[self.animateCount%4],(self.width,self.height*self.visible))
