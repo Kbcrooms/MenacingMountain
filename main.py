@@ -35,7 +35,7 @@ pygame.display.set_caption("Menacing Mountain")
 screen.fill((255,255,255))
 screen.blit(background, (0, 0))
 clock = pygame.time.Clock()
-prevTime = time.clock()
+prevTime = time.time()
 slopeY = 480-(math.tan(20)/640)
 mountainSprite = pygame.draw.polygon(screen,(255,255,255),((0,350),(0,slopeY),(800,480)))
 animateCount = 0
@@ -97,9 +97,9 @@ while running:
         sprites.draw(screen)
         screen.blit(snowSprites[animateCount%4],(0,0))
         screen.blit(scoreboard,scoreboard.get_rect(center=(320,460)))
-        if(time.clock()-prevTime>.035):
+        if(time.time()-prevTime>.035):
             animateCount += 1
-            prevTime = time.clock()
+            prevTime = time.time()
         #Draw End
     elif not playing:
         mouse = pygame.mouse.get_pos()

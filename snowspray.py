@@ -17,11 +17,11 @@ class Snowspray(pygame.sprite.Sprite):
         self.y = y
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
-        self.prevTime = time.clock()
+        self.prevTime = time.time()
         self.animateCount = 0
 
     def update(self):
-        if(time.clock()-self.prevTime >.1):
-            self.prevTime = time.clock()
+        if(time.time()-self.prevTime >.1):
+            self.prevTime = time.time()
             self.animateCount += 1
             self.image = pygame.transform.scale(self.images[self.animateCount%4],(self.width,self.height*self.visible))

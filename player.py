@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.y = y
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
-        self.prevTime = time.clock()
+        self.prevTime = time.time()
         self.animateCount = 0
         self.lives = 3
         self.jumping = 0
@@ -32,25 +32,25 @@ class Player(pygame.sprite.Sprite):
         self.dashSpeed = 4
 
     def update(self):
-        if(time.clock()-self.prevTime >.1):
-            self.prevTime = time.clock()
+        if(time.time()-self.prevTime >.1):
+            self.prevTime = time.time()
             self.animateCount += 1
             self.image = pygame.transform.scale(self.images[self.animateCount%4],(self.width,self.height))
-        if (self.jumping and time.clock()-self.jumpTime<.3):
+        if (self.jumping and time.time()-self.jumpTime<.45):
             self.y -= 2*self.jumpSpeed
             self.rect.center = (self.x,self.y)
 
-        elif((not self.jumping or time.clock()-self.jumpTime>=.3)and self.y < 370):
+        elif((not self.jumping or time.time()-self.jumpTime>=.45)and self.y < 370):
             self.y += self.jumpSpeed
             self.rect.center = (self.x,self.y)
         self.snowspray.visible = self.y >= 370 and self.x <= 150
 
-        if (self.dashing and time.clock()-self.dashTime<.3):
+        if (self.dashing and time.time()-self.dashTime<.6):
             self.y += self.dashSpeed
             self.x += self.dashSpeed
             self.rect.center = (self.x,self.y)
 
-        elif((not self.jumping or time.clock()-self.dashTime>=.3)and self.x > 150):
+        elif((not self.jumping or time.time()-self.dashTime>=.6)and self.x > 150):
             self.y -= self.dashSpeed
             self.x -= self.dashSpeed
             self.rect.center = (self.x,self.y)
@@ -68,11 +68,11 @@ class Player(pygame.sprite.Sprite):
     def setJump(self):
         if(self.y >= 370):
             self.jumpSound.play()
-            self.jumpTime = time.clock()
+            self.jumpTime = time.time()
             self.jumping = 1
 
     def setDash(self):
         if(self.x <= 150):
             self.jumpSound.play()
-            self.dashTime = time.clock()
+            self.dashTime = time.time()
             self.dashing = 1

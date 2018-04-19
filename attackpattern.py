@@ -7,10 +7,10 @@ class AttackPattern():
         self.player = player
         self.sprites = sprites
         self.projectiles = projectiles
-        self.prevTime = time.clock()
-        self.cooldown = 1 #seconds
+        self.prevTime = time.time()
+        self.cooldown = 2 #seconds
     def attack(self,score):
-        if(time.clock()-self.prevTime>self.cooldown):
+        if(time.time()-self.prevTime>self.cooldown):
             if(score<250):
                 self.attack1()
             elif(score<500):
@@ -18,14 +18,14 @@ class AttackPattern():
                 self.attack1()
             else:
                 if(score%2):
-                    self.cooldown=.75
+                    self.cooldown=1.25
                     self.attack1()
                     self.attack3(540,80)
                 else:
-                    self.cooldown=1.25
+                    self.cooldown=2.25
                     self.attack2(200,370)
                     self.attack1()
-            self.prevTime = time.clock()
+            self.prevTime = time.time()
     def reset(self):
         cooldown = 1
 

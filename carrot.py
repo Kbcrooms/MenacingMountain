@@ -27,23 +27,23 @@ class Carrot(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(pygame.transform.scale(self.images[0],(self.width,self.height)),self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
-        self.prevMoveTime = time.clock()
-        self.prevAniTime = time.clock()
+        self.prevMoveTime = time.time()
+        self.prevAniTime = time.time()
         self.animateCount = 0
 
 
     def update(self):
-        if(time.clock()-self.prevAniTime >.1):
+        if(time.time()-self.prevAniTime >.1):
             #self.ratio = (self.y - self.attackLock[1])/(self.x - self.attackLock[0])
             self.animateCount += 1
             self.image = pygame.transform.rotate(pygame.transform.scale(self.images[self.animateCount%2],(self.width,self.height)),self.angle)
-            self.prevAniTime = time.clock()
+            self.prevAniTime = time.time()
 
-        if(time.clock()-self.prevMoveTime >.02):
+        if(time.time()-self.prevMoveTime >.015):
             self.x += self.speed/self.ratio
             self.y -= self.speed*self.ratio
             self.rect.center = (self.x,self.y)
-            self.prevMoveTime = time.clock()
+            self.prevMoveTime = time.time()
         if pygame.sprite.collide_rect(self,self.player):
             self.player.hurt()
             self.kill()
