@@ -25,11 +25,11 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.jumping = 0
         self.jumpTime = 0
-        self.jumpSpeed = 4
+        self.jumpSpeed = 5
         self.jumpSound = pygame.mixer.Sound('sounds/jump_woosh.wav')
         self.dashing = 0
         self.dashTime = 0
-        self.dashSpeed = 3
+        self.dashSpeed = 4
 
     def update(self):
         if(time.clock()-self.prevTime >.1):

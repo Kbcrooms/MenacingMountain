@@ -8,7 +8,7 @@ from attackpattern import AttackPattern
 screenWidth = 640
 screenHeight = 480
 
-framerate = 60
+framerate = 30
 background = pygame.image.load('background.png')
 snowSprites = []
 snowSprites.append(pygame.image.load('sprites/snow/snow_1.png'))
@@ -19,7 +19,7 @@ pygame.init()
 screen = pygame.display.set_mode((screenWidth,screenHeight))
 pygame.mixer.init()
 pygame.mixer.music.load('sounds/soundtrack.wav')
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.play(-1)
 font = pygame.font.SysFont("Helvetica", 45)
 font.set_bold(True)
 startmenu = font.render('Menacing Mountain', True, (128, 0, 0))
@@ -40,6 +40,7 @@ slopeY = 480-(math.tan(20)/640)
 mountainSprite = pygame.draw.polygon(screen,(255,255,255),((0,350),(0,slopeY),(800,480)))
 animateCount = 0
 sprites = pygame.sprite.Group()
+projectiles = pygame.sprite.Group()
 healthbarX = 20
 healthbarY = 460
 healthbar = [Health(healthbarX,healthbarY),Health(healthbarX+20,healthbarY),Health(healthbarX+40,healthbarY)]
@@ -56,7 +57,7 @@ sprites.add(snowspray)
 sprites.add(healthbar)
 running = True
 playing = False
-attackpattern = AttackPattern(player,sprites)
+attackpattern = AttackPattern(player,sprites,projectiles)
 while running:
     delta = clock.tick(framerate)
     for event in pygame.event.get():
@@ -112,6 +113,8 @@ while running:
             pygame.draw.rect(screen, (172,0,0), buttonBody)
             if pygame.mouse.get_pressed()[0]:
                 playing = True
+                pygame.mixer.music.play(-1)
+
         else:
             pygame.draw.rect(screen, (128,0,0), buttonBody)
 
@@ -134,5 +137,9 @@ while running:
         if(animateCount>highscore):
             highscore = animateCount
         animateCount = 0
+        attackpattern.reset()
+        for sprite in sprites:
+            if isinstance(sprite,Carrot):
+                sprite.kill()
         #prob need more varibales reset
     pygame.display.flip()
