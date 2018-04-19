@@ -26,9 +26,11 @@ class Player(pygame.sprite.Sprite):
         self.jumping = 0
         self.jumpTime = 0
         self.jumpSpeed = 4
+        self.jumpSound = pygame.mixer.Sound('sounds/jump_woosh.wav')
         self.dashing = 0
         self.dashTime = 0
         self.dashSpeed = 3
+
     def update(self):
         if(time.clock()-self.prevTime >.1):
             self.prevTime = time.clock()
@@ -44,13 +46,13 @@ class Player(pygame.sprite.Sprite):
         self.snowspray.visible = self.y >= 370 and self.x <= 150
 
         if (self.dashing and time.clock()-self.dashTime<.3):
-            self.y += round(self.dashSpeed*math.tan(20))
-            self.x += round(self.dashSpeed/math.tan(20))
+            self.y += self.dashSpeed
+            self.x += self.dashSpeed
             self.rect.center = (self.x,self.y)
 
         elif((not self.jumping or time.clock()-self.dashTime>=.3)and self.x > 150):
-            self.y -= round(self.dashSpeed*math.tan(20))
-            self.x -= round(self.dashSpeed/math.tan(20))
+            self.y -= self.dashSpeed
+            self.x -= self.dashSpeed
             self.rect.center = (self.x,self.y)
 
 
@@ -59,15 +61,18 @@ class Player(pygame.sprite.Sprite):
         self.healthbar[self.lives].kill()
 
 
-    def reset(self):
+    def reset(self,healthbar):
         self.lives = 3
+        self.healthbar = healthbar
 
     def setJump(self):
         if(self.y >= 370):
+            self.jumpSound.play()
             self.jumpTime = time.clock()
             self.jumping = 1
 
     def setDash(self):
         if(self.x <= 150):
+            self.jumpSound.play()
             self.dashTime = time.clock()
             self.dashing = 1
