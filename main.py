@@ -71,6 +71,11 @@ while running:
                 playing = True
                 pygame.mixer.music.stop()
                 pygame.mixer.music.play(-1)
+            elif(event.key == pygame.K_f):
+                if screen.get_flags() & pygame.FULLSCREEN:
+                    pygame.display.set_mode((screenWidth,screenHeight))
+                else:
+                    pygame.display.set_mode((screenWidth,screenHeight), pygame.FULLSCREEN)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 player.jumping = False
